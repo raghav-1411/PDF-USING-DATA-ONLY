@@ -1,211 +1,133 @@
-📊 Learning Probability Density Function using GAN
+# 📊 Learning Probability Density Function using GAN
 
-Generative modeling of an unknown transformed distribution using adversarial learning.
+**Generative modeling of an unknown transformed distribution using adversarial learning**
 
-🔍 Project Overview
+---
 
-This project aims to learn the probability density function (PDF) of a transformed random variable using only data samples.
+## 🔍 Project Overview
 
-Instead of assuming a known parametric distribution (Gaussian, Exponential, etc.), a Generative Adversarial Network (GAN) is trained to implicitly model the distribution.
+This project aims to learn the **probability density function (PDF)** of a transformed random variable using only data samples.
 
-The learned distribution is then visualized using Kernel Density Estimation (KDE).
+Instead of assuming a known parametric distribution (Gaussian, Exponential, etc.), a **Generative Adversarial Network (GAN)** is trained to implicitly model the distribution. The learned distribution is then visualized using **Kernel Density Estimation (KDE)**.
 
-📁 Dataset
+---
 
-Dataset: India Air Quality Data
+## 📁 Dataset
 
-Feature Used: NO₂ concentration
+- **Dataset:** India Air Quality Data  
+- **Feature Used:** NO₂ concentration  
+- **Source:** Kaggle  
+- **Link:** https://www.kaggle.com/datasets/shrutibhargava94/india-air-quality-data  
+- **Samples Used:** All valid NO₂ observations after removing missing values  
 
-Source: Kaggle
+The NO₂ concentration values are treated as the original random variable **x**.
 
-Samples Used: __________
+---
 
-The NO₂ concentration values are treated as the original random variable 
-𝑥
-x.
+## 🔄 Transformation
 
-🔄 Transformation
+Each data point is transformed using:
 
-Each data point is transformed as:
-
-𝑧
-=
-𝑥
-+
-𝑎
-𝑟
-sin
-⁡
-(
-𝑏
-𝑟
-𝑥
-)
-z=x+a
-r
-	​
-
-sin(b
-r
-	​
-
-x)
+z = x + a_r sin(b_r x)
 
 Where:
 
-𝑎
-𝑟
-=
-0.5
-(
-𝑟
- 
-m
-o
-d
- 
-7
-)
-a
-r
-	​
+a_r = 0.5 (r mod 7)  
+b_r = 0.3 ((r mod 5) + 1)
 
-=0.5(rmod7)
-𝑏
-𝑟
-=
-0.3
-(
-(
-𝑟
- 
-m
-o
-d
- 
-5
-)
-+
-1
-)
-b
-r
-	​
+---
 
-=0.3((rmod5)+1)
-📌 My Parameters
+## 📌 My Parameters
 
-Roll Number: __________
+- **Roll Number:** 102303580  
+- **a_r:** 0.5  
+- **b_r:** 0.3  
 
-a_r: __________
+The transformed variable **z** is assumed to be sampled from an unknown distribution.
 
-b_r: __________
+---
 
-The transformed variable 
-𝑧
-z is assumed to be sampled from an unknown distribution.
+## 🧠 GAN Architecture
 
-🧠 GAN Architecture
-🎯 Generator
+### 🎯 Generator
+- Input: 1D Gaussian noise N(0,1)
+- Fully connected neural network
+- Activation: ReLU
+- Output: 1D generated sample
 
-Input: 1D Gaussian noise 
-𝑁
-(
-0
-,
-1
-)
-N(0,1)
+### 🕵️ Discriminator
+- Input: Real or generated sample
+- Fully connected neural network
+- Activation: LeakyReLU
+- Output: Probability (Real / Fake)
 
-Fully connected layers
+---
 
-Activation: ReLU
+## ⚙️ Training Setup
 
-Output: 1D generated sample
+| Parameter | Value |
+|-----------|------|
+| Loss Function | Binary Cross Entropy |
+| Optimizer | Adam |
+| Epochs | 3000 |
+| Batch Size | 128 |
+| Noise Dimension | 10 |
+| Device | CPU / GPU (auto-detected) |
 
-🕵️ Discriminator
+---
 
-Input: Real or generated sample
+## 📈 PDF Estimation
 
-Fully connected layers
+After GAN training:
 
-Activation: LeakyReLU
+1. Synthetic samples are generated using the trained generator.
+2. Kernel Density Estimation (KDE) is applied.
+3. The estimated probability density function is plotted.
 
-Output: Probability (Real / Fake)
+---
 
-⚙️ Training Setup
+## 📊 Final Estimated PDF
 
-Loss Function: Binary Cross Entropy
+![Estimated PDF](outputs/pdf_estimate.png)
 
-Optimizer: Adam
+---
 
-Epochs: __________
+## 🔎 Results & Observations
 
-Batch Size: __________
+### 📌 Mode Coverage
+The generator captures major density modes of the transformed distribution. Minor deviations appear in sparse regions due to adversarial learning limitations.
 
-Device: CPU / GPU
+### 📌 Training Stability
+- Initial oscillations observed during early training.
+- Loss curves stabilize after sufficient epochs.
+- No severe mode collapse detected.
 
-📈 PDF Estimation
+### 📌 Distribution Quality
+- Generated samples closely resemble the empirical distribution.
+- KDE produces a smooth density estimate.
+- Small stochastic outliers may appear.
 
-After training:
+---
 
-A large number of synthetic samples were generated.
+## 🚀 Key Learnings
 
-Kernel Density Estimation (KDE) was applied.
+- GANs can approximate unknown probability distributions without analytical assumptions.
+- Data normalization improves GAN convergence.
+- Balance between generator and discriminator is crucial.
+- KDE provides smooth visualization of learned densities.
 
-The estimated probability density function was plotted.
+---
 
-📊 Final Estimated PDF
+## 🛠 Technologies Used
 
-(Insert your plot image here)
+- Python
+- PyTorch
+- NumPy
+- Pandas
+- Matplotlib
+- SciPy
 
-🔎 Results & Observations
-📌 Mode Coverage
+---
 
-Did the generator capture all density peaks?
 
-Any missing regions?
 
-📌 Training Stability
-
-Loss convergence behavior
-
-Oscillations or instability observed?
-
-Evidence of mode collapse?
-
-📌 Distribution Quality
-
-Similarity between real and generated distributions
-
-Smoothness of KDE
-
-Outliers or artifacts
-
-(Write this section carefully in your own analysis tone.)
-
-🚀 Key Learnings
-
-GANs can approximate complex distributions without assuming analytical form.
-
-Proper normalization improves training stability.
-
-Adversarial balance is crucial for stable convergence.
-
-KDE provides smooth visualization of learned density.
-
-🛠 Technologies Used
-
-Python
-
-PyTorch
-
-NumPy
-
-Pandas
-
-Matplotlib
-
-SciPy
-
-📂 Project Structure
